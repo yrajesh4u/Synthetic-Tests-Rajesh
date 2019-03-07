@@ -1,0 +1,5 @@
+default:
+ MiddlemindVip        : "Int-mm-vip.tp1.tivo.com"
+ mm_port              : "2197"
+ TextSearchBodyId_02  : "tsn:A8F000006BFA313"
+ mind_version         : "mind/mind26"
