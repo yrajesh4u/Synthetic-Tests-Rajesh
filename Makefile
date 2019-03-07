@@ -1,6 +1,6 @@
 all: build
 
-SUITE := test_textsearchbynumbers
+SUITE := textsearchbynumbers
 SUB := $(or ${SUB},${SUB},'')
 TAG := $(or ${TAG},${TAG},latest)
 IMAGE=docker.tivo.com/synthetic-tests-$(SUITE)
