@@ -19,10 +19,12 @@ class Testtextsearchbynumbers:
 			if "unifiedItem"  not in json_data:
 				assert False,"The unifiedItem section is not present in the response of search collection api" 
 			else:
-				if "collection" not in json_data["unifiedItem"][0]["type"]:
+				if "collection" != json_data["unifiedItem"][0]["type"]:
 					assert False,"The text collection is not present in the response of search collection api"
 		except json.JSONDecodeError:
 			assert False, "Decoding JSON from the response failed"
+		except KeyError as e:
+                        assert False, "Missing key while parsing the json response. Details:" + str(e)
 
 
 
@@ -34,12 +36,14 @@ class Testtextsearchbynumbers:
 		try:
 			json_data = json.loads(response.text)
 			if "unifiedItem"  not in json_data:
-				assert False,"The unifiedItem section is not present in the response of search collection api" 
+				assert False,"The unifiedItem section is not present in the response of search content api" 
 			else:
-				if "content" not in json_data["unifiedItem"][0]["type"]:
-					assert False,"The text content is not present in the response of search collection api"
+				if "content" != json_data["unifiedItem"][0]["type"]:
+					assert False,"The text content is not present in the response of search content api"
 		except json.JSONDecodeError:
 			assert False, "Decoding JSON from the response failed"
+		except KeyError as e:
+                        assert False, "Missing key while parsing the json response. Details:" + str(e)
 
 
 	def test_searchperson(self):
@@ -49,12 +53,14 @@ class Testtextsearchbynumbers:
 		try:
 			json_data = json.loads(response.text)
 			if "unifiedItem"  not in json_data:
-				assert False,"The unifiedItem section is not present in the response of search collection api" 
+				assert False,"The unifiedItem section is not present in the response of search person api" 
 			else:
-				if "person" not in json_data["unifiedItem"][0]["type"]:
-					assert False,"The text person is not present in the response of search collection api"
+				if "person" != json_data["unifiedItem"][0]["type"]:
+					assert False,"The text person is not present in the response of search person api"
 		except json.JSONDecodeError:
 			assert False, "Decoding JSON from the response failed"
+		except KeyError as e:
+                        assert False, "Missing key while parsing the json response. Details:" + str(e)
 
 	def test_searchteam(self):
 	    combined_payload=json.dumps({**config['payload'],**config['payload_team']})
@@ -63,12 +69,14 @@ class Testtextsearchbynumbers:
 	    try:
 	    	json_data = json.loads(response.text)
 	    	if "unifiedItem"  not in json_data:
-	    		assert False,"The unifiedItem section is not present in the response of search collection api" 
+	    		assert False,"The unifiedItem section is not present in the response of search team api" 
 	    	else:
-	    		if "team" not in json_data["unifiedItem"][0]["type"]:
-	    			assert False,"The text team is not present in the response of search collection api"
+	    		if "team" != json_data["unifiedItem"][0]["type"]:
+	    			assert False,"The text team is not present in the response of search team api"
 	    except json.JSONDecodeError:
 	    	assert False, "Decoding JSON from the response failed"
+	    except KeyError as e:
+                        assert False, "Missing key while parsing the json response. Details:" + str(e)
 
 	@pytest.mark.skip(reason="failing due to DS endpoint failure. TODO revisit later.")
 	def test_searchchannel(self):
@@ -78,12 +86,14 @@ class Testtextsearchbynumbers:
 		try:
 			json_data = json.loads(response.text)
 			if "unifiedItem"  not in json_data:
-				assert False,"The unifiedItem section is not present in the response of search collection api" 
+				assert False,"The unifiedItem section is not present in the response of search channel api" 
 			else:
-				if "channel" not in json_data["unifiedItem"][0]["type"]:
-					assert False,"The text channel is not present in the response of search collection api"
+				if "channel" != json_data["unifiedItem"][0]["type"]:
+					assert False,"The text channel is not present in the response of search channel api"
 		except json.JSONDecodeError:
 			assert False, "Decoding JSON from the response failed"
+		except KeyError as e:
+                        assert False, "Missing key while parsing the json response. Details:" + str(e)
 
 
 
