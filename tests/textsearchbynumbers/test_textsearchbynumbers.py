@@ -70,6 +70,7 @@ class Testtextsearchbynumbers:
 	    except json.JSONDecodeError:
 	    	assert False, "Decoding JSON from the response failed"
 
+	@pytest.mark.skip(reason="failing due to DS endpoint failure. TODO revisit later.")
 	def test_searchchannel(self):
 		combined_payload=json.dumps({**config['payload'],**config['payload_channel']})
 		response=requests.post(url=url,headers=headers,params=params,data=combined_payload)
