@@ -78,7 +78,6 @@ class Testtextsearchbynumbers:
 	    except KeyError as e:
                         assert False, "Missing key while parsing the json response. Details:" + str(e)
 
-	@pytest.mark.skip(reason="failing due to DS endpoint failure. TODO revisit later.")
 	def test_searchchannel(self):
 		combined_payload=json.dumps({**config['payload'],**config['payload_channel']})
 		response=requests.post(url=url,headers=headers,params=params,data=combined_payload)
