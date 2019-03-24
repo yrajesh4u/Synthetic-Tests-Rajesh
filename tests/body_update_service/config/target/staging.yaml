@@ -1,0 +1,12 @@
+default:
+  deviceActivate: 'feprovendpoint.tpa1.tivo.com:50124'
+  random_number: '10070'
+  anonymizer: 'anonymizer.tpa1.tivo.com:80'
+  npvrEnablement: 'stas04.tivo.com:8081'
+  serviceActivate: 'otws.tivo.com'
+  bodyConfig: 'middlemind-int.st.tivo.com:2197'
+  internalId: 'int:050001144994F1EE'
+  PCID: '10070'
+  bodyId: 'A8F000006B71153'
+  idType: 'partnerCustomerId:production'
+  npvr_bodyId: 'tsn:AF50F00000133DD' 
