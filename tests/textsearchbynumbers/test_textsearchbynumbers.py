@@ -2,16 +2,18 @@ import pytest
 import requests
 import re
 import json
+from datetime import datetime
 from pytest_lib import config
 
 headers = {"content-type": "application/json", "accept": "application/json"}
 params = {"type":"discovery1NumericUnifiedItemSearch","bodyId":config['TextSearchBodyId_02']}
 url='http://'+ config['MiddlemindVip'] + ':' + config['mm_port'] + '/' + config ["mind_version"]
+current_time={"minEndTime" : str(datetime.now())}
 
 class Testtextsearchbynumbers:
 
 	def test_searchcollection(self):
-		combined_payload=json.dumps({**config['payload'],**config['payload_collection']})
+		combined_payload=json.dumps({**config['payload'],**config['payload_collection'],**current_time})
 		response=requests.post(url=url,headers=headers,params=params,data=combined_payload)
 		assert response.status_code == 200
 		try:
@@ -30,7 +32,7 @@ class Testtextsearchbynumbers:
 
 
 	def test_searchcontent(self):
-		combined_payload=json.dumps({**config['payload'],**config['payload_content']})
+		combined_payload=json.dumps({**config['payload'],**config['payload_content'],**current_time})
 		response=requests.post(url=url,headers=headers,params=params,data=combined_payload)
 		assert response.status_code == 200
 		try:
@@ -47,7 +49,7 @@ class Testtextsearchbynumbers:
 
 
 	def test_searchperson(self):
-		combined_payload=json.dumps({**config['payload'],**config['payload_person']})
+		combined_payload=json.dumps({**config['payload'],**config['payload_person'],**current_time})
 		response=requests.post(url=url,headers=headers,params=params,data=combined_payload)
 		assert response.status_code == 200
 		try:
@@ -63,7 +65,7 @@ class Testtextsearchbynumbers:
                         assert False, "Missing key while parsing the json response. Details:" + str(e)
 
 	def test_searchteam(self):
-	    combined_payload=json.dumps({**config['payload'],**config['payload_team']})
+	    combined_payload=json.dumps({**config['payload'],**config['payload_team'],**current_time})
 	    response=requests.post(url=url,headers=headers,params=params,data=combined_payload)
 	    assert response.status_code == 200
 	    try:
@@ -79,7 +81,7 @@ class Testtextsearchbynumbers:
                         assert False, "Missing key while parsing the json response. Details:" + str(e)
 
 	def test_searchchannel(self):
-		combined_payload=json.dumps({**config['payload'],**config['payload_channel']})
+		combined_payload=json.dumps({**config['payload'],**config['payload_channel'],**current_time})
 		response=requests.post(url=url,headers=headers,params=params,data=combined_payload)
 		assert response.status_code == 200
 		try:
