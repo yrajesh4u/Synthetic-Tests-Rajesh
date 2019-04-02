@@ -1,31 +1,24 @@
 default:
- MiddlemindVip        : "Int-mm-vip.tp1.tivo.com"
- mm_port              : "2197"
- TextSearchBodyId_02  : "tsn:A8F000006BFA313"
- mind_version         : "mind/mind26"
- payload_collection   : {"numbers":"22","count":"1","includeUnifiedItemType" : ["collection"]}
- payload_content      : {"numbers":"33","count":"1","includeUnifiedItemType" : ["content"]}
- payload_person       : {"numbers":"44","count":"2","includeUnifiedItemType" : ["person"]}
- payload_team         : {"numbers":"22","count":"2","includeUnifiedItemType" : ["team"]}
- payload_channel      : {"numbers":"2222","count":"2","includeUnifiedItemType" : ["channel"]}
- payload              : {
-    "includePaid" : true,
-    "numRelevantItems" : "100",
-    "bodyId" : "tsn:A8F000006BFA313",
-    "includeBroadband" : true,
-    "includeIpVod" : true,
-    "useLineup" : false,
-    "offset" : "0",
-    "includePersonSearch" : true,
-    "includeBroadcast" : true,
-    "includeFree" : true,
-    "includeVod" : true,
-    "mergeOverridingCollections" : true,
-    "mergeOverridingContent" : true,
-    "searchable" : true,
-    "orderBy" : [
-        "relevance",
-        "strippedTitle"
-    ],
-    "type" : "discovery1NumericUnifiedItemSearch"
-}
+  'pytest_mark' : 'synthetic_tests_textsearch'
+  'device_domains' : ['cableco','rcn']
+  'MiddlemindVip'        : 'int-mm-vip.tp1.tivo.com'
+  'mm_port'              : '2197'
+  'device_domain_config':
+    'cableco':
+      'mso': 'cableco'
+      'bodyId': 'tsn:A8F000006BFA313'
+      'mind_version'         : "mind/mind26"
+      'payload_collection'   : {"bodyId": "tsn:A8F000006BFA313","numbers":"22","count":"1","includeUnifiedItemType" : ["collection"]}
+      'payload_content'      : {"bodyId": "tsn:A8F000006BFA313","numbers":"33","count":"1","includeUnifiedItemType" : ["content"]}
+      'payload_person'       : {"bodyId": "tsn:A8F000006BFA313","numbers":"44","count":"2","includeUnifiedItemType" : ["person"]}
+      'payload_team'         : {"bodyId": "tsn:A8F000006BFA313","numbers":"22","count":"2","includeUnifiedItemType" : ["team"]}
+      'payload_channel'      : {"bodyId": "tsn:A8F000006BFA313","numbers":"456","count":"2","includeUnifiedItemType" : ["channel"]}
+    'rcn':
+      'mso': 'rcn'
+      'bodyId': 'tsn:A9F000001682889'
+      'mind_version'         : 'mind/mind32'
+      'payload_collection'   : {"bodyId": "tsn:A9F000001682889","numbers":"44","count":"1","includeUnifiedItemType" : ["collection"]}
+      'payload_content'      : {"bodyId": "tsn:A9F000001682889","numbers":"22","count":"1","includeUnifiedItemType" : ["content"]}
+      'payload_person'       : {"bodyId": "tsn:A9F000001682889","numbers":"2222","count":"2","includeUnifiedItemType" : ["person"]}
+      'payload_team'         : {"bodyId": "tsn:A9F000001682889","numbers":"22","count":"2","includeUnifiedItemType" : ["team"]}
+      'payload_channel'      : {"bodyId": "tsn:A9F000001682889","numbers":"33","count":"2","includeUnifiedItemType" : ["channel"]}
