@@ -2,28 +2,7 @@ from pytest_lib import config
 from datetime import datetime
 import json
 
-
-common_payload =  {
-    "includePaid" : "true",
-    "numRelevantItems" : "100",
-    "includeBroadband" : "true",
-    "includeIpVod" : "true",
-    "useLineup" : "false",
-    "offset" : "0",
-    "includePersonSearch" : "true",
-    "includeBroadcast" : "true",
-    "includeFree" : "true",
-    "includeVod" : "true",
-    "mergeOverridingCollections" : "true",
-    "minEndTime" : str(datetime.now()),
-    "mergeOverridingContent" : "true",
-    "searchable" : "true",
-    "orderBy" : [
-        "relevance",
-        "strippedTitle"
-    ],
-    "type" : "discovery1NumericUnifiedItemSearch"
-}
+  
 class Testtextserachpayload:
     
     """
@@ -64,27 +43,38 @@ class Testtextserachpayload:
 
 
     @staticmethod
-    def textsearch_collection_payload(device_domain_config=None):
-        combined_payload=json.dumps({**common_payload,**device_domain_config["payload_collection"]})
-        return combined_payload
+    def textsearch_payload(device_domain_config=None):
+        payload={
+                    "bodyId": device_domain_config["bodyId"],
+                    "count": 16,
+                    "deviceType": [
+                                    "stb"
+                                ],
+                    "includeBroadband": "true",
+                    "includeBroadcast": "true",
+                    "includeIpVod": "true",
+                    "includeUnifiedItemType": [
+                                                    "collection",
+                                                    "content",
+                                                    "person",
+                                                    "channel",
+                                                    "team"
+                                            ],
+                    "levelOfDetail": "medium",
+                    "mergeOverridingCollections": "true",
+                    "mergeOverridingContent": "true",
+                    "minEndTime": str(datetime.now()),
+                    "numRelevantItems": 50,
+                    "numbers": "3743637*",
+                    "offset": 0,
+                    "orderBy": [
+                                    "relevance",
+                                    "strippedTitle"
+                                ],
+                    "searchable": "true",
+                    "useLineup": "false",
+                    "type": "discovery1NumericUnifiedItemSearch"
+                    }
+        return json.dumps(payload)
 
-    @staticmethod
-    def textsearch_content_payload(device_domain_config=None):
-        combined_payload=json.dumps({**common_payload,**device_domain_config["payload_content"]})
-        return combined_payload
-
-    @staticmethod
-    def textsearch_person_payload(device_domain_config=None):
-        combined_payload=json.dumps({**common_payload,**device_domain_config["payload_person"]})
-        return combined_payload
-
-    @staticmethod
-    def textsearch_team_payload(device_domain_config=None):
-        combined_payload=json.dumps({**common_payload,**device_domain_config["payload_team"]})
-        return combined_payload
-
-    @staticmethod
-    def textsearch_channel_payload(device_domain_config=None):
-        combined_payload=json.dumps({**common_payload,**device_domain_config["payload_channel"]})
-        return combined_payload
-        
+    
