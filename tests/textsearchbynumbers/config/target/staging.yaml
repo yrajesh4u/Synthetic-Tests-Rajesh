@@ -1,14 +1,16 @@
 default:
   'pytest_mark' : 'synthetic_tests_textsearch'
-  'device_domains' : ['cableco']
+  'device_domains' : ['cableco-stb']
   'MiddlemindVip'        : 'middlemind-int.st.tivo.com'
   'mm_port'              : '2197'
   'device_domain_config':
-    'cableco':
+    'cableco-stb':
       'mso': 'cableco'
+      'deviceType': 'stb'
       'bodyId': 'tsn:A8F000006B7F351'
       'mind_version'         : "mind/mind26"
     'rcn':
       'mso': 'rcn'
       'bodyId': 'tsn:A9F000001681CA8'
+      'deviceType': 'stb'
       'mind_version'         : 'mind/mind26'

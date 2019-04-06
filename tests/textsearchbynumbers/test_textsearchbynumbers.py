@@ -14,6 +14,11 @@ class Testtextsearchbynumbers(Testtextserachpayload):
 	@staticmethod
 	def get_device_config(request, record_xml_attribute, device_domain):
 		device_config = config["device_domain_config"][device_domain]
+		add_device_tag(
+            request=request,
+            record_xml_attribute=record_xml_attribute,
+            device=device_config['deviceType']
+        )
 		add_mso_tag(
             request=request,
             record_xml_attribute=record_xml_attribute,
