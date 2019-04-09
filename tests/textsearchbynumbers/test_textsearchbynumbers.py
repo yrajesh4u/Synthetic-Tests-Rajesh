@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 from test_data import Testtextserachpayload
 from pytest_lib import config, add_device_tag, add_mso_tag
+from synth_test_lib.synthassert import synthassert
 
 headers={"Content-Type":"application/json","Accept":"application/json"}
 
@@ -36,10 +37,14 @@ class Testtextsearchbynumbers(Testtextserachpayload):
 		assert response.status_code == 200,response.reason
 		try:
 			json_data = json.loads(response.text)
-			if "unifiedItem"  not in json_data:
-				assert False,"The unifiedItem section is not present in the response of search collection api"
-			else:
-				assert json_data["unifiedItem"][0]["type"] == "collection" or "content" or "person" or "team" or "channel"					
+			synthassert(
+				"unifiedItem" in json_data,
+				message=" Expected 'unifiedItem' in the response ",
+				response=response)
+			synthassert(
+				json_data["unifiedItem"][0]["type"] == "collection" or "content" or "person" or "team" or "channel",
+				message= "type validation failed:  Expected 'collection or content or person or team or channel' Actual '{}'".format(json_data["unifiedItem"][0]["type"]) ,
+				response=response)					
 		except json.JSONDecodeError:
 			assert False, "Decoding JSON from the response failed"
 		except KeyError as e:
