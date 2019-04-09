@@ -15,11 +15,14 @@ build:
 	docker login docker.tivo.com
 	docker build $(CACHE) $(PULL) -t $(IMAGE) .
 
+test:
+	docker run --rm $(IMAGE) --suite $(SUITE) --probe test --target production --action test --debug true
+
 run:
-	docker run --rm --network=host -it $(IMAGE) --suite $(SUITE) --probe $(PROBE) --target $(TARGET) --debug true
+	docker run --rm $(IMAGE) --suite $(SUITE) --probe $(PROBE) --target $(TARGET) --debug true
 
 print_config:
-	docker run --rm --network=host -it $(IMAGE) --suite $(SUITE) --probe $(PROBE) --target $(TARGET) --action print_config --debug true
+	docker run --rm $(IMAGE) --suite $(SUITE) --probe $(PROBE) --target $(TARGET) --action print_config --debug true
 
 deploy: build
 	docker tag $(IMAGE) $(REPO_IMAGE):$(TAG)
