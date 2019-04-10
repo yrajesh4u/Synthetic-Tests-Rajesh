@@ -29,9 +29,10 @@ class TestBodyUpdateServiceScenario2:
                     response=resp)
         self.testdata.bodyId = resp_json['tveServiceActivateResponse']['tivoSerialNumber']
         synthassert(resp_json['tveServiceActivateResponse']['status'] == 'success', 
-                    message="Error:\nExpected status == 'success\nActual:  '{}'".format(resp_json['tveServiceActivateResponse']['status']),
+                    message="Error:\nExpected status == 'success\nActual:  '{}'".format(
+                        resp_json['tveServiceActivateResponse']['status']),
                     response=resp)
-        time.sleep(60)
+        time.sleep(30)
 
     def test_102_anonymizerPartnerExternalIdTranslate(self):
         url, method, data = self.testdata.data_anonymizerPartnerExternalIdTranslate()
@@ -43,13 +44,13 @@ class TestBodyUpdateServiceScenario2:
                     response=resp)
         self.testdata.internalId = resp_json['internalId']
         synthassert(resp_json['type'] == "anonymizerPartnerMap", 
-                    message="Error:\nExpected type == 'anonymizerPartnerMap'\nActual:  '{}'".format(resp_json['type']),
+                    message="Error:\nExpected type == 'anonymizerPartnerMap'\nActual: '{}'".format(resp_json['type']),
                     response=resp)
         synthassert(resp_json['idType'] == config['idType'],
-                    message="Error:Expected idType == config['idType']\nActual:  '{}'".format(resp_json['idType']),
+                    message="Error:Expected idType == config['idType']\nActual: '{}'".format(resp_json['idType']),
                     response=resp)
         synthassert(resp_json['partnerId'] == "tivo:pt.3689",
-                    message="Error:\nExpected partnerId == 'tivo:pt.3689'\nActual:  '{}'".format(resp_json['partnerId']),
+                    message="Error:\nExpected partnerId == 'tivo:pt.3689'\nActual: '{}'".format(resp_json['partnerId']),
                     response=resp)
         synthassert(bool(re.search('internalId', resp.text)),
                     message='Not able to get internalId in resp',
@@ -69,13 +70,12 @@ class TestBodyUpdateServiceScenario2:
         synthassert(not (resp_json['npvrEnablement'][0]['npvrEnabled']),
                     message='Error: npvrEnabled is true',
                     response=resp)
-        time.sleep(5)
+        time.sleep(10)
 
     def test_104_bodyConfigSearch(self):
         url, method, data = self.testdata.data_bodyConfigSearch()
         header = {'Content-Type': 'application/json'}
         resp = self.base.api_call(url, method, data, headers=header)
-        resp_json = json.loads(resp.text)
         synthassert(not (bool(re.search('networkPvr', resp.text))),
                     message='Able to get networkPvr in resp',
                     response=resp)
@@ -127,7 +127,6 @@ class TestBodyUpdateServiceScenario2:
         url, method, data = self.testdata.data_bodyConfigSearch()
         header = {'Content-Type': 'application/json'}
         resp = self.base.api_call(url, method, data, headers=header)
-        resp_json = json.loads(resp.text)
         synthassert(bool(re.search('networkPvr', resp.text)),
                     message='Not able to get networkPvr in resp',
                     response=resp)
@@ -135,9 +134,8 @@ class TestBodyUpdateServiceScenario2:
                     message='Not able to get bodyConfigList in resp',
                     response=resp)
         synthassert(bool(re.search('recordingSettings', resp.text)),
-              message='Not able to get recordingSettings in resp',
-              response=resp)
-        #add more
+                    message='Not able to get recordingSettings in resp',
+                    response=resp)
         time.sleep(5)
 
     def test_108_ProvDeviceCancel(self):
@@ -148,13 +146,12 @@ class TestBodyUpdateServiceScenario2:
         synthassert(resp_json['type'] == 'success',
                     message="Error:\nExpected type == 'success'\nActual:  '{}'".format(resp_json['type']),
                     response=resp)
-        time.sleep(60)
+        time.sleep(30)
 
     def test_109_bodyConfigSearchAfterCancel(self):
         url, method, data = self.testdata.data_bodyConfigSearch()
         header = {'Content-Type': 'application/json'}
         resp = self.base.api_call(url, method, data, headers=header)
-        resp_json = json.loads(resp.text)
         synthassert(not(bool(re.search('networkPvr', resp.text))),
                     message='Able to get networkPvr in resp',
                     response=resp)
@@ -176,7 +173,8 @@ class TestBodyUpdateServiceScenario2:
                     message='No tveServiceActivateResponse in resp',
                     response=resp)
         synthassert(resp_json['tveServiceCancelResponse']['status'] == 'success',
-                    message="Error:\nExpected status == 'success'\nActual:  '{}'".format(resp_json['tveServiceCancelResponse']['status']),
+                    message="Error:\nExpected status == 'success'\nActual:  '{}'".format(
+                        resp_json['tveServiceCancelResponse']['status']),
                     response=resp)
 
 

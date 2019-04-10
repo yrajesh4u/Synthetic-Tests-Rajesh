@@ -1,7 +1,8 @@
 import requests
+from synth_test_lib.synthassert import synthassert
 
 class BodyUpdateService:
-    API_TIMEOUT = 150
+    API_TIMEOUT = 700
     HEADERS = {}
     HEADERS.setdefault('Accept-Language', 'en')
     HEADERS.setdefault('User-Agent', 'Automation-QA')
@@ -22,5 +23,10 @@ class BodyUpdateService:
         except ConnectionError as e:
             print("ERROR in %s call: %s " % (str(method).upper(), e))
 
-        assert response.status_code == status_code, response.content
+        synthassert(
+            response.status_code == status_code,
+            message="Expected: {}, Actual: {}".format(status_code, response.status_code),
+            response=response
+        )
+
         return response
