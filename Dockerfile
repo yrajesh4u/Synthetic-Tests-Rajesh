@@ -6,4 +6,4 @@ RUN curl -o /app/synthetic-tests-library-apis-$VERSION.tar.gz http://repo-vip.ti
 RUN pip install --upgrade  /app/synthetic-tests-library-apis-$VERSION.tar.gz
 
 RUN pip install xmltodict
-ADD tests/body_update_service /app/tests/body_update_service
+ADD tests/body-update-service /app/tests/body-update-service
