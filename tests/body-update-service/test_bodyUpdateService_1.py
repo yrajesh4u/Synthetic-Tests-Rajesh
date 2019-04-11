@@ -24,9 +24,6 @@ class TestBodyUpdateServiceScenario1:
         synthassert(bool(re.search('optStatus', resp.text)),
                     message='Not able to get optStatus in resp',
                     response=resp)
-        synthassert(resp_json['optStatus'] == 'optIn',
-                    message="Error:\nExpected 'optIn'\nActual:  '{}'".format(resp_json['optStatus']),
-                    response=resp)
         synthassert(resp_json['type'] == 'provAccount',
                     "Error:\nExpected 'provAccount'\nActual:  {}".format(resp_json['type']),
                     response=resp)
