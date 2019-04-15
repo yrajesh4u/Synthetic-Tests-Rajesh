@@ -10,6 +10,7 @@ class BodyUpdateService:
     HEADERS.setdefault('Accept-Encoding', 'gzip,deflate')
     HEADERS.setdefault('SchemaVersion', '2')
     HEADERS.setdefault('Accept', 'application/json')
+    HEADERS.setdefault('ApplicationName', 'bodyUpdateServiceSyntheticTests')
 
     def api_call(self, url, method, data=None, headers=None, timeout=API_TIMEOUT, cert=None, verify=None, status_code=200):
         response = None
