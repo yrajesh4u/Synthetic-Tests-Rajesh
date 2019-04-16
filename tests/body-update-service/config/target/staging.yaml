@@ -1,7 +1,7 @@
 default:
   deviceActivate: 'feprovendpoint.tpa1.tivo.com:50124'
   anonymizer: 'anonymizer.tpa1.tivo.com:80'
-  npvrEnablement: 'stmind-ro-vip.tivo.com:8085'
+  npvrEnablement: 'http://middlemind-int.st.tivo.com:2197/mind/mind33'
   serviceActivate: 'otws.tivo.com'
   bodyConfig: 'middlemind-int.st.tivo.com:2197'
   internalId: 'int:050001144994F1EE'

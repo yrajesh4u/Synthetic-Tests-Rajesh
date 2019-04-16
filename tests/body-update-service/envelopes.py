@@ -49,8 +49,7 @@ class TestDataEnvelopes:
         return url, method, data
 
     def data_npvrEnablementSearch(self):
-        url = 'http://%s/tacomind/v13/do?type=npvrEnablementSearch' % \
-              config['npvrEnablement']
+        url = '%s?type=npvrEnablementSearch' % config['npvrEnablement']
         method = 'POST'
         data = '''{"accountId": "''' + self.internalId + '''",
                 "type": "npvrEnablementSearch"}'''
