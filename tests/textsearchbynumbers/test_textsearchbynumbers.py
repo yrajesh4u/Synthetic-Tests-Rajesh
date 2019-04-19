@@ -11,20 +11,19 @@ headers={"Content-Type":"application/json","Accept":"application/json"}
 @pytest.mark.synthetic_tests_textsearch
 @pytest.mark.parametrize('device_domain', config["device_domains"])
 class Testtextsearchbynumbers(Testtextserachpayload):
-
 	@staticmethod
 	def get_device_config(request, record_xml_attribute, device_domain):
 		device_config = config["device_domain_config"][device_domain]
 		add_device_tag(
-            request=request,
-            record_xml_attribute=record_xml_attribute,
-            device=device_config['deviceType']
-        )
+			request=request,
+			record_xml_attribute=record_xml_attribute,
+			device=device_config['deviceType']
+			)
 		add_mso_tag(
-            request=request,
-            record_xml_attribute=record_xml_attribute,
-            mso=device_config['mso']
-        )
+			request=request,
+			record_xml_attribute=record_xml_attribute,
+			mso=device_config['mso']
+			)
 		return device_config
 	
 	@pytest.mark.dependency()
@@ -34,7 +33,9 @@ class Testtextsearchbynumbers(Testtextserachpayload):
 		payload=self.textsearch_payload(device_domain_config=device_domain_config)
 		params=self.textsearch_params(device_domain_config=device_domain_config)
 		response=requests.post(url=url,headers=headers,params=params,data=payload)
-		assert response.status_code == 200,response.reason
+		synthassert(response.status_code == 200,
+					message=response.reason,
+					response=response)
 		try:
 			json_data = json.loads(response.text)
 			synthassert(
@@ -46,8 +47,12 @@ class Testtextsearchbynumbers(Testtextserachpayload):
 				message= "type validation failed:  Expected 'collection or content or person or team or channel' Actual '{}'".format(json_data["unifiedItem"][0]["type"]) ,
 				response=response)					
 		except json.JSONDecodeError:
-			assert False, "Decoding JSON from the response failed"
+			synthassert(False, 
+						message="Decoding JSON from the response failed",
+						response=response)
 		except KeyError as e:
-                        assert False, "Missing key while parsing the json response. Details:" + str(e)
+			synthassert(False, 
+						message="Missing key while parsing the json response. Details:" + str(e),
+				    	esponse=response)
 
 	
