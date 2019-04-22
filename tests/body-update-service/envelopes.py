@@ -1,17 +1,21 @@
 from pytest_lib import config
+import random
 
 
 class TestDataEnvelopes:
     npvr_bodyId = None
     internalId = None
     bodyId = None
+    partnerCustomerList = ['10070', '10071', '10072', '10073']
+    partnerCustomerID = random.choice(partnerCustomerList)
 
-    def data_ProvAccountStore(self):
+
+    def data_ProvAccountStore(self, pcid):
         url = 'http://%s/pr1ProvAccountStore' % config['deviceActivate']
         method = 'POST'
         data = '''{"accountAlaCartePackage": ["NpvrMediumPackage"],
                     "feOperatorName": "CableCo",
-                    "partnerCustomerId":  "''' + config['random_number'] + '''",
+                    "partnerCustomerId":  "''' + pcid + '''",
                     "type": "pr1ProvAccountStore"}'''
         return url, method, data
 
@@ -29,23 +33,23 @@ class TestDataEnvelopes:
                 "deviceAlaCartePackage": ["CableCo-Device-TIVOCO2"],
                 "deviceType": "npvr",
                 "feOperatorName": "CableCo",
-                "partnerCustomerId": "''' + config['random_number'] + '''",
+                "partnerCustomerId": "''' + self.partnerCustomerID + '''",
                 "type": "pr1ProvDeviceActivate"}'''
+        print('PCID: ' + self.partnerCustomerID)
         return url, method, data
 
     def data_anonymizerPartnerExternalIdTranslate(self):
         url = 'http://%s/anonymizerPartnerExternalIdTranslate?type=anonymizerPartnerExternalIdTranslate' % \
               config['anonymizer']
         method = 'POST'
-        data = '''{"partnerExternalId": "''' + config['random_number'] + '''",
+        data = '''{"partnerExternalId": "''' + self.partnerCustomerID + '''",
                 "idType": "''' + config['idType'] + '''",
                 "partnerId":"tivo:pt.3689",
                 "type":"anonymizerPartnerExternalIdTranslate"}'''
         return url, method, data
 
     def data_npvrEnablementSearch(self):
-        url = 'http://%s/tacomind/v13/do?type=npvrEnablementSearch&ApplicationName=bodyUpdateServiceSyntheticTests' % \
-              config['npvrEnablement']
+        url = '%s?type=npvrEnablementSearch' % config['npvrEnablement']
         method = 'POST'
         data = '''{"accountId": "''' + self.internalId + '''",
                 "type": "npvrEnablementSearch"}'''
@@ -57,7 +61,7 @@ class TestDataEnvelopes:
         data = '''<tveServiceActivate>
                 <contract>
                 <customer>
-                <partnerCustomerId>''' + config['random_number'] + '''</partnerCustomerId>
+                <partnerCustomerId>''' + self.partnerCustomerID + '''</partnerCustomerId>
                 </customer>
                 <device>
                 <deviceType>iPad</deviceType>
@@ -81,7 +85,7 @@ class TestDataEnvelopes:
         method = 'POST'
         data = '''{"bodyId": "''' + self.npvr_bodyId + '''",
                   "feOperatorName": "CableCo",
-                  "partnerCustomerId": "''' + config['random_number'] + '''",
+                  "partnerCustomerId": "''' + self.partnerCustomerID + '''",
                   "type": "pr1ProvDeviceCancel"}'''
         return url, method, data
 
@@ -92,7 +96,7 @@ class TestDataEnvelopes:
                     <cancellationCode>MS</cancellationCode>
                         <contract>
                         <customer>
-                          <partnerCustomerId>''' + config['random_number'] + '''</partnerCustomerId>
+                          <partnerCustomerId>''' + self.partnerCustomerID + '''</partnerCustomerId>
                         </customer>
                     <device>
                     <tivoSerialNumber>''' + self.bodyId + '''</tivoSerialNumber>
