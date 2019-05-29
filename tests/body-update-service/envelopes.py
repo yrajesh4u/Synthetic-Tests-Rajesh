@@ -6,9 +6,24 @@ class TestDataEnvelopes:
     npvr_bodyId = None
     internalId = None
     bodyId = None
+    ProvDeviceActivate_txnId = None
+    service_fe_account_id = None
+    tveServiceActivate_requestId = None
+    tivo_customer_id = None
     partnerCustomerList = ['10070', '10071', '10072', '10073']
     partnerCustomerID = random.choice(partnerCustomerList)
 
+    def data_get_health(self, node):
+        url = 'http://%s/health' % node
+        method = 'GET'
+        data = None
+        return url, method, data
+
+    def data_get_info(self, node):
+        url = 'http://%s/info' % node
+        method = 'GET'
+        data = None
+        return url, method, data
 
     def data_ProvAccountStore(self, pcid):
         url = 'http://%s/pr1ProvAccountStore' % config['deviceActivate']
