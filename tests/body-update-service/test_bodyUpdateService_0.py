@@ -6,7 +6,7 @@ from pytest_lib import config
 from synth_test_lib.synthassert import synthassert
 
 
-class TestBodyUpdateServiceScenario1:
+class TestBodyUpdateServiceHealthInfo:
     testdata = TestDataEnvelopes()
     base = BodyUpdateService()
 
