@@ -1,7 +1,6 @@
 import requests
 import time
 import json
-import datetime
 from synth_test_lib.synthassert import synthassert
 
 
@@ -26,7 +25,6 @@ class BodyUpdateService:
                 response = requests.post(url, data=data, headers=headers, timeout=timeout, cert=cert, verify=verify)
             elif method.upper() == 'GET':
                 response = requests.get(url=url, timeout=timeout)
-            print('Url Exec TimeStamp: ', datetime.datetime.now())
         except ConnectionError as e:
             print("ERROR in %s call: %s " % (str(method).upper(), e))
         synthassert(
@@ -38,18 +36,17 @@ class BodyUpdateService:
         return response
 
     @staticmethod
-    def get_kafka_key_value_messages(consumer, timeout=20):
+    def get_kafka_key_value_messages(consumer, timeout=40):
         end_time = time.time() + timeout
         data = []
         while time.time() < end_time:
-            message = consumer.get_latest_message_along_with_key(timeout=10)
+            message = consumer.get_latest_message_along_with_key(timeout=20)
 
             if message:
                 data.append(message)
         return data
 
-    def prov_device_activate_kafka_validation(self, consumer, transaction_id, timeout=100):
-        print('Kafka Exec TimeStamp: ', datetime.datetime.now())
+    def prov_device_activate_kafka_validation(self, consumer, transaction_id, timeout=120):
         end_time = time.time() + timeout
         while time.time() < end_time:
             data = self.get_kafka_key_value_messages(consumer=consumer)
@@ -61,8 +58,7 @@ class BodyUpdateService:
 
         return False, 'Not able to find serviceFeAccountId for given transactionId'
 
-    def tve_service_activate_kafka_validation(self, consumer, request_id, timeout=100):
-        print('Kafka Exec TimeStamp: ', datetime.datetime.now())
+    def tve_service_activate_kafka_validation(self, consumer, request_id, timeout=120):
         end_time = time.time() + timeout
         while time.time() < end_time:
             data = self.get_kafka_key_value_messages(consumer=consumer)

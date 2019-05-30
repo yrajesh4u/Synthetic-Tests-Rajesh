@@ -13,7 +13,7 @@ class TestBodyUpdateServiceScenario2:
     testdata = TestDataEnvelopes()
     base = BodyUpdateService()
 
-    def test_101_tveServiceActivate(self, tve_service_activate_kafka_consumer):
+    def test_101_tveServiceActivate(self):
         url, method, data = self.testdata.data_tveServiceActivate()
         header = {'Content-Type': 'text/xml', 'Accept': '*/*'}
         cert = ('./3767.crt', './3767.key')
@@ -39,13 +39,13 @@ class TestBodyUpdateServiceScenario2:
 
         self.testdata.bodyId = resp_json['tveServiceActivateResponse']['tivoSerialNumber']
         self.testdata.tveServiceActivate_requestId = resp_json['tveServiceActivateResponse']['requestId']
-        time.sleep(30)
 
     def test_101_tveServiceActivate_kafka_log(self, tve_service_activate_kafka_consumer):
         status, tivo_customer_id = \
             self.base.tve_service_activate_kafka_validation(tve_service_activate_kafka_consumer,
                                                             self.testdata.tveServiceActivate_requestId)
-        time.sleep(150)
+        # Added 3 min sleep after tveServiceActivate and kafka log capture.
+        time.sleep(180)
         assert status, tivo_customer_id
         self.testdata.tivo_customer_id = tivo_customer_id
 
