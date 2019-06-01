@@ -1,8 +1,7 @@
 from docker.tivo.com/synthetic-tests-pytest:stable
 
-RUN pip install --upgrade pip
 # Pre-requisite for confluent-kafka-python==0.11.4
-RUN apk add build-base librdkafka-dev python3-dev
+RUN apk add build-base librdkafka-dev
 
 # Get the synthetic tests library using jfrog
 ARG VERSION=1.0.0
