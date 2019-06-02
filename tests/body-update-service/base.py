@@ -56,7 +56,7 @@ class BodyUpdateService:
                 if value['transactionId'] == transaction_id:
                     return True, value['serviceFeAccountId']
 
-        return False, 'Not able to find serviceFeAccountId for given transactionId'
+        return False, 'Not able to find serviceFeAccountId for given transactionId=%' % transaction_id
 
     def tve_service_activate_kafka_validation(self, consumer, request_id, timeout=120):
         end_time = time.time() + timeout
@@ -68,5 +68,5 @@ class BodyUpdateService:
                 if value['transactionId'] == request_id:
                     return True, value['tivoCustomerId']
 
-        return False, 'Not able to find tivoCustomerId for given request_id'
+        return False, 'Not able to find tivoCustomerId for given request_id=%s' % request_id
 
