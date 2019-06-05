@@ -6,14 +6,12 @@ from envelopes import TestDataEnvelopes
 from base import BodyUpdateService
 from pytest_lib import config
 import time
-
 from synth_test_lib.synthassert import synthassert
 
 
 class TestBodyUpdateServiceScenario2:
     testdata = TestDataEnvelopes()
     base = BodyUpdateService()
-
 
     def test_101_tveServiceActivate(self):
         url, method, data = self.testdata.data_tveServiceActivate()
@@ -40,7 +38,16 @@ class TestBodyUpdateServiceScenario2:
                     response=resp)
 
         self.testdata.bodyId = resp_json['tveServiceActivateResponse']['tivoSerialNumber']
+        self.testdata.tveServiceActivate_requestId = resp_json['tveServiceActivateResponse']['requestId']
+
+    def test_101_tveServiceActivate_kafka_log(self, tve_service_activate_kafka_consumer):
+        status, tivo_customer_id = \
+            self.base.tve_service_activate_kafka_validation(tve_service_activate_kafka_consumer,
+                                                            self.testdata.tveServiceActivate_requestId)
+        # Added 3 min sleep after tveServiceActivate and kafka log capture.
         time.sleep(180)
+        assert status, tivo_customer_id
+        self.testdata.tivo_customer_id = tivo_customer_id
 
     def test_102_anonymizerPartnerExternalIdTranslate(self):
         url, method, data = self.testdata.data_anonymizerPartnerExternalIdTranslate()
@@ -71,6 +78,10 @@ class TestBodyUpdateServiceScenario2:
                     response=resp)
         synthassert(resp_json['partnerId'] == "tivo:pt.3689",
                     message="Error:\nExpected:  'tivo:pt.3689'\nActual:  '{}'".format(resp_json['partnerId']),
+                    response=resp)
+        synthassert(self.testdata.tivo_customer_id == resp_json['internalId'],
+                    message="Error tivo_customer_id in KafkaLog != internalId in anonymizerPartnerExternalIdTranslate:"
+                            "\nExpected: %s \nActual: %s" % (self.testdata.tivo_customer_id, resp_json['internalId']),
                     response=resp)
 
         self.testdata.internalId = resp_json['internalId']
@@ -253,6 +264,3 @@ class TestBodyUpdateServiceScenario2:
                     response=resp)
 
         time.sleep(180)
-
-
-

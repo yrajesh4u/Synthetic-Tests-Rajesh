@@ -6,8 +6,8 @@ from envelopes import TestDataEnvelopes
 from base import BodyUpdateService
 from pytest_lib import config
 import time
-
 from synth_test_lib.synthassert import synthassert
+
 
 class TestBodyUpdateServiceScenario1:
     testdata = TestDataEnvelopes()
@@ -42,7 +42,6 @@ class TestBodyUpdateServiceScenario1:
                             resp_json['partnerAccount']['partnerCustomerId']),
                         response=resp)
 
-
     def test_102_ProvDeviceActivate(self):
         url, method, data = self.testdata.data_ProvDeviceActivate()
         header = {'Content-Type': 'application/json'}
@@ -72,8 +71,16 @@ class TestBodyUpdateServiceScenario1:
                     response=resp)
 
         self.testdata.npvr_bodyId = resp_json['bodyId']
-        
+        self.testdata.ProvDeviceActivate_txnId = resp_json['transactionId']
+
+    def test_102_ProvDeviceActivate_kafka_log(self, prov_device_activate_kafka_consumer):
+        status, service_fe_account_id = \
+            self.base.prov_device_activate_kafka_validation(prov_device_activate_kafka_consumer,
+                                                            self.testdata.ProvDeviceActivate_txnId)
+        # Added 3 min sleep after ProvDeviceActivate and kafka log capture.
         time.sleep(180)
+        assert status, service_fe_account_id
+        self.testdata.service_fe_account_id = service_fe_account_id
 
     def test_103_anonymizerPartnerExternalIdTranslate(self):
         url, method, data = self.testdata.data_anonymizerPartnerExternalIdTranslate()
@@ -105,6 +112,12 @@ class TestBodyUpdateServiceScenario1:
         synthassert(resp_json['partnerId'] == "tivo:pt.3689",
                     message="Error:\nExpected:  'tivo:pt.3689'\nActual:  '{}'".format(resp_json['partnerId']),
                     response=resp)
+        synthassert(self.testdata.service_fe_account_id == resp_json['internalId'],
+                    message="Error service_fe_account_id in KafkaLog != internalId in "
+                            "anonymizerPartnerExternalIdTranslate\nExpected: %s \nActual: %s"
+                            % (self.testdata.service_fe_account_id, resp_json['internalId']),
+                    response=resp)
+
         self.testdata.internalId = resp_json['internalId']
 
     def test_104_npvrEnablementSearch(self):
@@ -259,7 +272,3 @@ class TestBodyUpdateServiceScenario1:
                     response=resp)
 
         time.sleep(180)
-
-
-
-
