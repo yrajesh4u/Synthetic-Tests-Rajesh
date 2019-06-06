@@ -4,11 +4,12 @@ import json
 import xmltodict
 from envelopes import TestDataEnvelopes
 from base import BodyUpdateService
-from pytest_lib import config
+from pytest_lib import config, mso_tag
 import time
 from synth_test_lib.synthassert import synthassert
 
-
+@pytest.mark.parametrize('mso', ['common'])
+@pytest.mark.usefixtures("mso_tag")
 class TestBodyUpdateServiceScenario1:
     testdata = TestDataEnvelopes()
     base = BodyUpdateService()

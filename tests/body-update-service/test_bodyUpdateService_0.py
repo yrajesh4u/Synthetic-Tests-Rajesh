@@ -2,10 +2,11 @@ import pytest
 import json
 from envelopes import TestDataEnvelopes
 from base import BodyUpdateService
-from pytest_lib import config
+from pytest_lib import config, mso_tag
 from synth_test_lib.synthassert import synthassert
 
-
+@pytest.mark.parametrize('mso', ['common'])
+@pytest.mark.usefixtures("mso_tag")
 class TestBodyUpdateServiceHealthInfo:
     testdata = TestDataEnvelopes()
     base = BodyUpdateService()
