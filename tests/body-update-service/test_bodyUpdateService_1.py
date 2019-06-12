@@ -79,7 +79,7 @@ class TestBodyUpdateServiceScenario1:
             self.base.prov_device_activate_kafka_validation(prov_device_activate_kafka_consumer,
                                                             self.testdata.ProvDeviceActivate_txnId)
         # Added 3 min sleep after ProvDeviceActivate and kafka log capture.
-        time.sleep(180)
+        time.sleep(250)
         assert status, service_fe_account_id
         self.testdata.service_fe_account_id = service_fe_account_id
 
@@ -168,7 +168,7 @@ class TestBodyUpdateServiceScenario1:
 
         self.testdata.bodyId = resp_json['tveServiceActivateResponse']['tivoSerialNumber']
 
-        time.sleep(180)
+        time.sleep(250)
 
     def test_106_npvrEnablementSearchAfterAddingDevice(self):
         url, method, data = self.testdata.data_npvrEnablementSearch()
@@ -228,7 +228,7 @@ class TestBodyUpdateServiceScenario1:
                     message="Error:\nExpected type == 'success\nActual:  '{}'".format(resp_json['type']),
                     response=resp)
 
-        time.sleep(180)
+        time.sleep(250)
 
     def test_109_bodyConfigSearchAfterCancel(self):
         url, method, data = self.testdata.data_bodyConfigSearch()
@@ -272,4 +272,4 @@ class TestBodyUpdateServiceScenario1:
                         resp_json['tveServiceCancelResponse']['status']),
                     response=resp)
 
-        time.sleep(180)
+        time.sleep(250)
