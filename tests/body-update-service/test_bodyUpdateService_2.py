@@ -46,7 +46,7 @@ class TestBodyUpdateServiceScenario2:
             self.base.tve_service_activate_kafka_validation(tve_service_activate_kafka_consumer,
                                                             self.testdata.tveServiceActivate_requestId)
         # Added 3 min sleep after tveServiceActivate and kafka log capture.
-        time.sleep(180)
+        time.sleep(250)
         assert status, tivo_customer_id
         self.testdata.tivo_customer_id = tivo_customer_id
 
@@ -160,7 +160,7 @@ class TestBodyUpdateServiceScenario2:
                     response=resp)
 
         self.testdata.npvr_bodyId = resp_json['bodyId']
-        time.sleep(180)
+        time.sleep(250)
 
     def test_106_npvrEnablementSearchAfterAddingDevice(self):
         url, method, data = self.testdata.data_npvrEnablementSearch()
@@ -220,7 +220,7 @@ class TestBodyUpdateServiceScenario2:
                     message="Error:\nExpected type == 'success'\nActual:  '{}'".format(resp_json['type']),
                     response=resp)
 
-        time.sleep(180)
+        time.sleep(250)
 
     def test_109_bodyConfigSearchAfterCancel(self):
         url, method, data = self.testdata.data_bodyConfigSearch()
@@ -264,4 +264,4 @@ class TestBodyUpdateServiceScenario2:
                         resp_json['tveServiceCancelResponse']['status']),
                     response=resp)
 
-        time.sleep(180)
+        time.sleep(250)
