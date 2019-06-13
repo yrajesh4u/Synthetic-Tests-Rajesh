@@ -52,9 +52,12 @@ class TestBodyUpdateServiceScenario1:
         synthassert('bodyId' in resp_json,
                     message="bodyId not available in response json",
                     response=resp)
+        self.testdata.npvr_bodyId = resp_json['bodyId']
         synthassert('transactionId' in resp_json,
                     message='Not able to get "transactionId" in resp',
                     response=resp)
+
+        self.testdata.ProvDeviceActivate_txnId = resp_json['transactionId']
         synthassert('type' in resp_json,
                     message='Not able to get "type" in resp',
                     response=resp)
@@ -70,9 +73,6 @@ class TestBodyUpdateServiceScenario1:
         synthassert(resp_json['type'] == 'provDevice',
                     message="Error:\nExpected type == 'provDevice'\nActual '{}'".format(resp_json['type']),
                     response=resp)
-
-        self.testdata.npvr_bodyId = resp_json['bodyId']
-        self.testdata.ProvDeviceActivate_txnId = resp_json['transactionId']
 
     def test_102_ProvDeviceActivate_kafka_log(self, prov_device_activate_kafka_consumer):
         status, service_fe_account_id = \
@@ -98,6 +98,7 @@ class TestBodyUpdateServiceScenario1:
         synthassert('internalId' in resp_json,
                     'Not able to get "internalId" in resp',
                     response=resp)
+        self.testdata.internalId = resp_json['internalId']
         synthassert('partnerExternalId' in resp_json,
                     'Not able to get "partnerExternalId" in resp',
                     response=resp)
@@ -118,8 +119,6 @@ class TestBodyUpdateServiceScenario1:
                             "anonymizerPartnerExternalIdTranslate\nExpected: %s \nActual: %s"
                             % (self.testdata.service_fe_account_id, resp_json['internalId']),
                     response=resp)
-
-        self.testdata.internalId = resp_json['internalId']
 
     def test_104_npvrEnablementSearch(self):
         url, method, data = self.testdata.data_npvrEnablementSearch()
@@ -272,4 +271,3 @@ class TestBodyUpdateServiceScenario1:
                         resp_json['tveServiceCancelResponse']['status']),
                     response=resp)
 
-        time.sleep(250)

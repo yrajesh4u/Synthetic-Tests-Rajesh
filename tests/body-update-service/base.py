@@ -52,9 +52,11 @@ class BodyUpdateService:
             data = self.get_kafka_key_value_messages(consumer=consumer)
 
             for msg in data:
-                value = json.loads([*msg.values()][0].split('\n')[-1])
-                if value['transactionId'] == transaction_id:
-                    return True, value['serviceFeAccountId']
+                    msg_str = [*msg.values()][0].split('\n')[-1]
+                    if 'transactionId' in msg_str:
+                        value = json.loads(msg_str)
+                        if value['transactionId'] == transaction_id:
+                            return True, value['serviceFeAccountId']
 
         return False, 'Not able to find serviceFeAccountId for given transactionId=%' % transaction_id
 
@@ -64,9 +66,11 @@ class BodyUpdateService:
             data = self.get_kafka_key_value_messages(consumer=consumer)
 
             for msg in data:
-                value = json.loads([*msg.values()][0].split('\n')[-1])
-                if value['transactionId'] == request_id:
-                    return True, value['tivoCustomerId']
+                msg_str = [*msg.values()][0].split('\n')[-1]
+                if 'transactionId' in msg_str:
+                    value = json.loads(msg_str)
+                    if value['transactionId'] == request_id:
+                        return True, value['tivoCustomerId']
 
         return False, 'Not able to find tivoCustomerId for given request_id=%s' % request_id
 

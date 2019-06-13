@@ -50,7 +50,7 @@ class TestDataEnvelopes:
                 "feOperatorName": "CableCo",
                 "partnerCustomerId": "''' + self.partnerCustomerID + '''",
                 "type": "pr1ProvDeviceActivate"}'''
-        print('PCID: ' + self.partnerCustomerID)
+        print('PCID- ' + self.partnerCustomerID)
         return url, method, data
 
     def data_anonymizerPartnerExternalIdTranslate(self):

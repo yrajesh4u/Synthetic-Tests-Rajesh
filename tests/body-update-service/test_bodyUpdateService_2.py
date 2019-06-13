@@ -27,19 +27,20 @@ class TestBodyUpdateServiceScenario2:
         synthassert('requestId' in resp_json['tveServiceActivateResponse'],
                     'Not able to get "requestId" in resp',
                     response=resp)
+
+        self.testdata.tveServiceActivate_requestId = resp_json['tveServiceActivateResponse']['requestId']
         synthassert('status' in resp_json['tveServiceActivateResponse'],
                     'Not able to get "status" in resp',
                     response=resp)
         synthassert('tivoSerialNumber' in resp_json['tveServiceActivateResponse'],
                     'Not able to get "tivoSerialNumber" in resp',
                     response=resp)
+
+        self.testdata.bodyId = resp_json['tveServiceActivateResponse']['tivoSerialNumber']
         synthassert(resp_json['tveServiceActivateResponse']['status'] == 'success',
                     message="Error:\nExpected status == 'sucess'\nActual:  '{}'".format(
                         resp_json['tveServiceActivateResponse']['status']),
                     response=resp)
-
-        self.testdata.bodyId = resp_json['tveServiceActivateResponse']['tivoSerialNumber']
-        self.testdata.tveServiceActivate_requestId = resp_json['tveServiceActivateResponse']['requestId']
 
     def test_101_tveServiceActivate_kafka_log(self, tve_service_activate_kafka_consumer):
         status, tivo_customer_id = \
@@ -65,6 +66,8 @@ class TestBodyUpdateServiceScenario2:
         synthassert('internalId' in resp_json,
                     'Not able to get "internalId" in resp',
                     response=resp)
+
+        self.testdata.internalId = resp_json['internalId']
         synthassert('partnerExternalId' in resp_json,
                     'Not able to get "partnerExternalId" in resp',
                     response=resp)
@@ -84,9 +87,6 @@ class TestBodyUpdateServiceScenario2:
                     message="Error tivo_customer_id in KafkaLog != internalId in anonymizerPartnerExternalIdTranslate:"
                             "\nExpected: %s \nActual: %s" % (self.testdata.tivo_customer_id, resp_json['internalId']),
                     response=resp)
-
-        self.testdata.internalId = resp_json['internalId']
-
 
     def test_103_npvrEnablementSearch(self):
         url, method, data = self.testdata.data_npvrEnablementSearch()
