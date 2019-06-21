@@ -1,2 +1,3 @@
 default:
   enable_noc_alert: 1
+  operator_visible: 1
