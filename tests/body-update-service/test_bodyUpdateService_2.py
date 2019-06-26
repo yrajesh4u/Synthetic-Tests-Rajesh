@@ -264,7 +264,7 @@ class TestBodyUpdateServiceScenario2:
                         resp_json['tveServiceCancelResponse']['status']),
                     response=resp)
 
-    def test_101_tveServiceCancel_kafka_log(self, tve_service_kafka_consumer):
+    def test_110_tveServiceCancel_kafka_log(self, tve_service_kafka_consumer):
         tivo_customer_id = \
             self.base.tve_service_cancel_kafka_validation(tve_service_kafka_consumer,
                                                           self.testdata.tivo_customer_id,
