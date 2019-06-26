@@ -42,9 +42,9 @@ class TestBodyUpdateServiceScenario2:
                         resp_json['tveServiceActivateResponse']['status']),
                     response=resp)
 
-    def test_101_tveServiceActivate_kafka_log(self, tve_service_activate_kafka_consumer):
+    def test_101_tveServiceActivate_kafka_log(self, tve_service_kafka_consumer):
         status, tivo_customer_id = \
-            self.base.tve_service_activate_kafka_validation(tve_service_activate_kafka_consumer,
+            self.base.tve_service_activate_kafka_validation(tve_service_kafka_consumer,
                                                             self.testdata.tveServiceActivate_requestId)
         # Added 3 min sleep after tveServiceActivate and kafka log capture.
         time.sleep(250)
@@ -264,4 +264,11 @@ class TestBodyUpdateServiceScenario2:
                         resp_json['tveServiceCancelResponse']['status']),
                     response=resp)
 
+    def test_101_tveServiceCancel_kafka_log(self, tve_service_kafka_consumer):
+        tivo_customer_id = \
+            self.base.tve_service_cancel_kafka_validation(tve_service_kafka_consumer,
+                                                          self.testdata.tivo_customer_id,
+                                                          self.testdata.tveServiceActivate_requestId)
+        assert tivo_customer_id, "tivo_customer_id cancel fail for given tivo_customer_id=%s" % \
+                                 self.testdata.tivo_customer_id
         time.sleep(250)

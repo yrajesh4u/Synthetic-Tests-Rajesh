@@ -4,7 +4,7 @@ from kafka_lib.confluent_kafka_msg_consumer import KafkaMsgConsumer
 
 
 @pytest.fixture(scope="class", autouse=True)
-def prov_device_activate_kafka_consumer(request):
+def prov_device_kafka_consumer(request):
 	conf = {
 		'enable.auto.commit': True,
 		'log.connection.close': False,
@@ -24,7 +24,7 @@ def prov_device_activate_kafka_consumer(request):
 
 
 @pytest.fixture(scope="class", autouse=True)
-def tve_service_activate_kafka_consumer(request):
+def tve_service_kafka_consumer(request):
 	conf = {
 		'enable.auto.commit': True,
 		'log.connection.close': False,

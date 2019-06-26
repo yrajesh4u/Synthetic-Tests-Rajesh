@@ -74,9 +74,9 @@ class TestBodyUpdateServiceScenario1:
                     message="Error:\nExpected type == 'provDevice'\nActual '{}'".format(resp_json['type']),
                     response=resp)
 
-    def test_102_ProvDeviceActivate_kafka_log(self, prov_device_activate_kafka_consumer):
+    def test_102_ProvDeviceActivate_kafka_log(self, prov_device_kafka_consumer):
         status, service_fe_account_id = \
-            self.base.prov_device_activate_kafka_validation(prov_device_activate_kafka_consumer,
+            self.base.prov_device_activate_kafka_validation(prov_device_kafka_consumer,
                                                             self.testdata.ProvDeviceActivate_txnId)
         # Added 3 min sleep after ProvDeviceActivate and kafka log capture.
         time.sleep(250)
@@ -227,6 +227,12 @@ class TestBodyUpdateServiceScenario1:
                     message="Error:\nExpected type == 'success\nActual:  '{}'".format(resp_json['type']),
                     response=resp)
 
+    def test_108_ProvDeviceCancel_kafka_log(self, prov_device_kafka_consumer):
+        service_state = \
+            self.base.prov_device_cancle_kafka_validation(prov_device_kafka_consumer,
+                                                          self.testdata.service_fe_account_id)
+        assert service_state == "cancel", "serviceState != cancel for given serviceFeAccountId=%s" % \
+                                          self.testdata.service_fe_account_id
         time.sleep(250)
 
     def test_109_bodyConfigSearchAfterCancel(self):
@@ -270,4 +276,3 @@ class TestBodyUpdateServiceScenario1:
                     message="Error:\nExpected status == 'success'\nActual:  '{}'".format(
                         resp_json['tveServiceCancelResponse']['status']),
                     response=resp)
-
