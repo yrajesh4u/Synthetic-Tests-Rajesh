@@ -83,10 +83,11 @@ class BodyUpdateService:
                     msg_str = [*msg.values()][0].split('\n')[-1]
                     if 'serviceFeAccountId' in msg_str:
                         value = json.loads(msg_str)
-                        if value['serviceFeAccountId'] == service_fe_account_id:
-                            return value['serviceState']
+                        if (value['serviceFeAccountId'] == service_fe_account_id) and \
+                                ('pr1ProvDeviceCancel' in value['transactionId']) and value['serviceState'] == 'cancel':
+                            return True
 
-        return False, 'Not able to find serviceState=cancel for given serviceFeAccountId=%' % service_fe_account_id
+        return False
 
     def tve_service_cancel_kafka_validation(self, consumer, tivo_customer_id, request_id, timeout=120):
         end_time = time.time() + timeout
@@ -101,4 +102,4 @@ class BodyUpdateService:
                             (value['transactionId'] != request_id):
                         return True
 
-        return False, 'Not able to find cancel msg for given tivoCustomerId=%s' % tivo_customer_id
+        return False
