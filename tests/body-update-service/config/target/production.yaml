@@ -1,1 +1,11 @@
-default:  {}
+default:
+  deviceActivate: 'feprovendpoint.tpa1.tivo.com:50124'
+  anonymizer: 'anonymizer.tpa1.tivo.com:80'
+  npvrEnablement: 'http://int-mm-vip.tp1.tivo.com:2197/mind/mind33'
+  serviceActivate: 'otws.tivo.com'
+  bodyConfig: 'int-mm-vip.tp1.tivo.com:2197'
+  idType: 'partnerCustomerId:production'
+  app_node: ['as01.tp1.tivo.com:9003', 'as02.tp1.tivo.com:9003', 'as03.tp1.tivo.com:9003', 'as04.tp1.tivo.com:9003']
+  kafka_host: 'kafka.tpc2.tivo.com:9092'
+  feExtDeviceTopic: 'mirror.tpa1.production.feexternal.deviceTopic'
+  tcidToTsnMap: 'mirror.tpa1.production.itproduction.kv.tcidToTsnMap'
