@@ -1,2 +1,2 @@
 default:
-  enable_noc_alert: 1
+  enable_noc_alert: 0
