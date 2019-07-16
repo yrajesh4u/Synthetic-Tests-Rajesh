@@ -22,7 +22,9 @@ emailBreaks(owner_email) {
         }
 
         stage('Build') {
-            sh "make pull build ${opts}"
+            docker.withRegistry('http://docker.tivo.com', 'docker-registry') {
+                sh "make pull build ${opts}"
+            }
         }
 
         stage('Test') {
@@ -31,7 +33,9 @@ emailBreaks(owner_email) {
 
         stage('Deploy') {
             if( whitelisted_branches.contains(branch) ) {
-                sh "make deploy ${opts}"
+                docker.withRegistry('http://docker.tivo.com', 'docker-registry') {
+                    sh "make deploy ${opts}"
+                }
             } else {
                 println( "Branch [${branch}] not in deployment whitelist.  Skipping step." )
             }
