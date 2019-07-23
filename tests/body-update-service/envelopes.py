@@ -10,8 +10,7 @@ class TestDataEnvelopes:
     service_fe_account_id = None
     tveServiceActivate_requestId = None
     tivo_customer_id = None
-    partnerCustomerList = ['10070', '10071', '10072', '10073']
-    partnerCustomerID = random.choice(partnerCustomerList)
+    partnerCustomerID = random.choice(config['partnerCustomerList'])
 
     def data_get_health(self, node):
         url = 'http://%s/health' % node

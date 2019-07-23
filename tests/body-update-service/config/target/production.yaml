@@ -9,3 +9,4 @@ default:
   kafka_host: 'kafka.tpc2.tivo.com:9092'
   feExtDeviceTopic: 'mirror.tpa1.production.feexternal.deviceTopic'
   tcidToTsnMap: 'mirror.tpa1.production.itproduction.kv.tcidToTsnMap'
+  partnerCustomerList: ['10070', '10071', '10072', '10073']
