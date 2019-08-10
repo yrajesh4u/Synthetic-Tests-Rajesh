@@ -14,6 +14,7 @@ class TestBodyUpdateServiceScenario1:
     testdata = TestDataEnvelopes()
     base = BodyUpdateService()
 
+
     def test_101_ProvAccountStore(self):
         pytest.skip('This test require only for new PCID')
         for elem in config['partnerCustomerList']:
@@ -43,42 +44,58 @@ class TestBodyUpdateServiceScenario1:
                             resp_json['partnerAccount']['partnerCustomerId']),
                         response=resp)
 
-    def test_102_ProvDeviceActivate(self):
+    def test_102_ProvDeviceActivate(self, prov_device_kafka_consumer, tve_service_kafka_consumer):
         url, method, data = self.testdata.data_ProvDeviceActivate()
         header = {'Content-Type': 'application/json'}
         resp = self.base.api_call(url, method, data, headers=header)
-
         resp_json = json.loads(resp.text)
-        synthassert('bodyId' in resp_json,
-                    message="bodyId not available in response json",
-                    response=resp)
-        self.testdata.npvr_bodyId = resp_json['bodyId']
-        synthassert('transactionId' in resp_json,
-                    message='Not able to get "transactionId" in resp',
-                    response=resp)
 
-        self.testdata.ProvDeviceActivate_txnId = resp_json['transactionId']
-        synthassert('type' in resp_json,
-                    message='Not able to get "type" in resp',
-                    response=resp)
-        synthassert('serviceState' in resp_json,
-                    message='Not able to get "serviceState" in resp',
-                    response=resp)
-        synthassert('deviceAlaCarteFeatureAttributeValue' in resp_json,
-                    'Not able to get "deviceAlaCarteFeatureAttributeValue" in resp',
-                    response=resp)
-        synthassert(resp_json['serviceState'] == 'active',
-                    message="Error:\nExpected service state == 'active'\nActual '{}'".format(resp_json['serviceState']),
-                    response=resp)
-        synthassert(resp_json['type'] == 'provDevice',
-                    message="Error:\nExpected type == 'provDevice'\nActual '{}'".format(resp_json['type']),
-                    response=resp)
+        if 'bodyId' in resp_json:
+            self.testdata.npvr_bodyId = resp_json['bodyId']
+            synthassert('transactionId' in resp_json,
+                        message='Not able to get "transactionId" in resp',
+                        response=resp)
+
+            self.testdata.ProvDeviceActivate_txnId = resp_json['transactionId']
+            synthassert('type' in resp_json,
+                        message='Not able to get "type" in resp',
+                        response=resp)
+            synthassert('serviceState' in resp_json,
+                        message='Not able to get "serviceState" in resp',
+                        response=resp)
+            synthassert('deviceAlaCarteFeatureAttributeValue' in resp_json,
+                        'Not able to get "deviceAlaCarteFeatureAttributeValue" in resp',
+                        response=resp)
+            synthassert(resp_json['serviceState'] == 'active',
+                        message="Error:\nExpected service state == 'active'\nActual '{}'".format(resp_json['serviceState']),
+                        response=resp)
+            synthassert(resp_json['type'] == 'provDevice',
+                        message="Error:\nExpected type == 'provDevice'\nActual '{}'".format(resp_json['type']),
+                        response=resp)
+
+        elif resp_json['code'] == 'badArgument':
+            try:
+                self.testdata.npvr_bodyId = re.search('.*has an active nPVR device: (tsn:.*) associated to it.*',
+                                                      resp_json['text']).group(1)
+                self.testdata.ProvDeviceActivate_txnId = None
+                self.testdata.usingExisingNpvrBodyId = True
+                print(self.testdata.npvr_bodyId, self.testdata.usingExisingNpvrBodyId)
+            except AttributeError:
+                synthassert(False,
+                            message="bodyId Or badArgument not available in response json",
+                            response=resp)
+        else:
+            synthassert('bodyId' in resp_json,
+                        message="bodyId not available in response json",
+                        response=resp)
 
     def test_102_ProvDeviceActivate_kafka_log(self, prov_device_kafka_consumer):
+        if self.testdata.usingExisingNpvrBodyId:
+            pytest.skip("Using existing NPVR device.")
+
         status, service_fe_account_id = \
             self.base.prov_device_activate_kafka_validation(prov_device_kafka_consumer,
                                                             self.testdata.ProvDeviceActivate_txnId)
-        # Added 3 min sleep after ProvDeviceActivate and kafka log capture.
         time.sleep(250)
         assert status, service_fe_account_id
         self.testdata.service_fe_account_id = service_fe_account_id
@@ -114,11 +131,15 @@ class TestBodyUpdateServiceScenario1:
         synthassert(resp_json['partnerId'] == "tivo:pt.3689",
                     message="Error:\nExpected:  'tivo:pt.3689'\nActual:  '{}'".format(resp_json['partnerId']),
                     response=resp)
-        synthassert(self.testdata.service_fe_account_id == resp_json['internalId'],
-                    message="Error service_fe_account_id in KafkaLog != internalId in "
-                            "anonymizerPartnerExternalIdTranslate\nExpected: %s \nActual: %s"
-                            % (self.testdata.service_fe_account_id, resp_json['internalId']),
-                    response=resp)
+
+        if self.testdata.usingExisingNpvrBodyId:
+            self.testdata.service_fe_account_id = resp_json['internalId']
+        else:
+            synthassert(self.testdata.service_fe_account_id == resp_json['internalId'],
+                        message="Error service_fe_account_id in KafkaLog != internalId in "
+                                "anonymizerPartnerExternalIdTranslate\nExpected: %s \nActual: %s"
+                                % (self.testdata.service_fe_account_id, resp_json['internalId']),
+                        response=resp)
 
     def test_104_npvrEnablementSearch(self):
         url, method, data = self.testdata.data_npvrEnablementSearch()
@@ -142,6 +163,9 @@ class TestBodyUpdateServiceScenario1:
         time.sleep(10)
 
     def test_105_tveServiceActivate(self):
+        if self.testdata.usingExisingNpvrBodyId:
+            pytest.skip("Using existing NPVR device.")
+
         url, method, data = self.testdata.data_tveServiceActivate()
         header = {'Content-Type': 'text/xml', 'Accept': '*/*'}
         cert = ('./3767.crt', './3767.key')
@@ -166,10 +190,23 @@ class TestBodyUpdateServiceScenario1:
                     response=resp)
 
         self.testdata.bodyId = resp_json['tveServiceActivateResponse']['tivoSerialNumber']
+        self.testdata.tveServiceActivate_requestId = resp_json['tveServiceActivateResponse']['requestId']
 
-        time.sleep(250)
+    def test_105_tveServiceActivate_kafka_log(self, tve_service_kafka_consumer):
+        if self.testdata.usingExisingNpvrBodyId:
+            pytest.skip("Using existing NPVR device.")
+
+        self.testdata.tve_activate_status, tivo_customer_id = \
+            self.base.tve_service_activate_kafka_validation(tve_service_kafka_consumer,
+                                                            self.testdata.tveServiceActivate_requestId)
+
+        assert self.testdata.tve_activate_status, tivo_customer_id
+        self.testdata.tivo_customer_id = tivo_customer_id
 
     def test_106_npvrEnablementSearchAfterAddingDevice(self):
+        if self.testdata.usingExisingNpvrBodyId:
+            pytest.skip("Dependent: test_105_tveServiceActivate_kafka_log. bypassing to cancel.")
+
         url, method, data = self.testdata.data_npvrEnablementSearch()
         header = {'Content-Type': 'application/json'}
         resp = self.base.api_call(url, method, data, headers=header)
@@ -191,6 +228,9 @@ class TestBodyUpdateServiceScenario1:
         time.sleep(10)
 
     def test_107_bodyConfigSearch(self):
+        if self.testdata.usingExisingNpvrBodyId:
+            pytest.skip("Dependent: test_105_tveServiceActivate_kafka_log. bypassing to cancel.")
+
         url, method, data = self.testdata.data_bodyConfigSearch()
         header = {'Content-Type': 'application/json'}
         resp = self.base.api_call(url, method, data, headers=header)
@@ -232,11 +272,14 @@ class TestBodyUpdateServiceScenario1:
             self.base.prov_device_cancle_kafka_validation(prov_device_kafka_consumer,
                                                           self.testdata.service_fe_account_id)
 
-        assert service_state, 'Not able to find serviceState=cancel for given serviceFeAccountId=%' % \
+        assert service_state, 'Not able to find serviceState=cancel for given serviceFeAccountId=%s' % \
                               self.testdata.service_fe_account_id
         time.sleep(250)
 
     def test_109_bodyConfigSearchAfterCancel(self):
+        if self.testdata.usingExisingNpvrBodyId:
+            pytest.skip("tve service activate fail. bypassing to cancel.")
+
         url, method, data = self.testdata.data_bodyConfigSearch()
         header = {'Content-Type': 'application/json'}
         resp = self.base.api_call(url, method, data, headers=header)
@@ -277,3 +320,15 @@ class TestBodyUpdateServiceScenario1:
                     message="Error:\nExpected status == 'success'\nActual:  '{}'".format(
                         resp_json['tveServiceCancelResponse']['status']),
                     response=resp)
+
+
+    def test_110_tveServiceCancel_kafka_log(self, tve_service_kafka_consumer):
+        if self.testdata.usingExisingNpvrBodyId:
+            pytest.skip("Dependent: test_105_tveServiceActivate_kafka_log. bypassing to cancel.")
+
+        tivo_customer_id = \
+            self.base.tve_service_cancel_kafka_validation(tve_service_kafka_consumer,
+                                                          self.testdata.tivo_customer_id,
+                                                          self.testdata.tveServiceActivate_requestId)
+        assert tivo_customer_id, "tivo_customer_id cancel fail for given tivo_customer_id=%s" % \
+                                 self.testdata.tivo_customer_id

@@ -32,7 +32,6 @@ class BodyUpdateService:
             message="Expected: {}, Actual: {}".format(status_code, response.status_code),
             response=response
         )
-
         return response
 
     @staticmethod
@@ -58,7 +57,7 @@ class BodyUpdateService:
                         if value['transactionId'] == transaction_id:
                             return True, value['serviceFeAccountId']
 
-        return False, 'Not able to find serviceFeAccountId for given transactionId=%' % transaction_id
+        return False, 'Not able to find serviceFeAccountId for given transactionId=%s' % transaction_id
 
     def tve_service_activate_kafka_validation(self, consumer, request_id, timeout=120):
         end_time = time.time() + timeout

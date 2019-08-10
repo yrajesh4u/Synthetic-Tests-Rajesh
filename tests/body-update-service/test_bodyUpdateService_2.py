@@ -14,6 +14,44 @@ class TestBodyUpdateServiceScenario2:
     testdata = TestDataEnvelopes()
     base = BodyUpdateService()
 
+    def test_100_ProvDeviceActivate(self, prov_device_kafka_consumer, tve_service_kafka_consumer):
+        url, method, data = self.testdata.data_ProvDeviceActivate()
+        header = {'Content-Type': 'application/json'}
+        resp = self.base.api_call(url, method, data, headers=header)
+        resp_json = json.loads(resp.text)
+
+        if 'bodyId' in resp_json:
+            self.testdata.npvr_bodyId = resp_json['bodyId']
+            synthassert('transactionId' in resp_json,
+                        message='Not able to get "transactionId" in resp',
+                        response=resp)
+
+        elif resp_json['code'] == 'badArgument':
+            try:
+                self.testdata.npvr_bodyId = re.search('.*has an active nPVR device: (tsn:.*) associated to it.*',
+                                                      resp_json['text']).group(1)
+            except AttributeError:
+                synthassert(False,
+                            message="bodyId Or badArgument not available in response json",
+                            response=resp)
+        else:
+            synthassert('bodyId' in resp_json,
+                        message="bodyId not available in response json",
+                        response=resp)
+        time.sleep(250)
+        url, method, data = self.testdata.data_pr1ProvDeviceCancel()
+        header = {'Content-Type': 'application/json'}
+        resp = self.base.api_call(url, method, data, headers=header)
+
+        resp_json = json.loads(resp.text)
+        synthassert('type' in resp_json,
+                    'Not able to get "type" in resp',
+                    response=resp)
+        synthassert(resp_json['type'] == 'success',
+                    message="Error:\nExpected type == 'success\nActual:  '{}'".format(resp_json['type']),
+                    response=resp)
+        time.sleep(250)
+
     def test_101_tveServiceActivate(self):
         url, method, data = self.testdata.data_tveServiceActivate()
         header = {'Content-Type': 'text/xml', 'Accept': '*/*'}
@@ -46,8 +84,6 @@ class TestBodyUpdateServiceScenario2:
         status, tivo_customer_id = \
             self.base.tve_service_activate_kafka_validation(tve_service_kafka_consumer,
                                                             self.testdata.tveServiceActivate_requestId)
-        # Added 3 min sleep after tveServiceActivate and kafka log capture.
-        time.sleep(250)
         assert status, tivo_customer_id
         self.testdata.tivo_customer_id = tivo_customer_id
 
@@ -131,8 +167,6 @@ class TestBodyUpdateServiceScenario2:
                     message='Not able to get recordingSettings in resp',
                     response=resp)
 
-        time.sleep(5)
-
     def test_105_ProvDeviceActivate(self):
         url, method, data = self.testdata.data_ProvDeviceActivate()
         header = {'Content-Type': 'application/json'}
@@ -159,8 +193,18 @@ class TestBodyUpdateServiceScenario2:
                     message="Error:\nExpected service state == 'active'\nActual '{}'".format(resp_json['serviceState']),
                     response=resp)
 
+        self.testdata.ProvDeviceActivate_txnId = resp_json['transactionId']
         self.testdata.npvr_bodyId = resp_json['bodyId']
+
+    def test_102_ProvDeviceActivate_kafka_log(self, prov_device_kafka_consumer):
+        if self.testdata.usingExisingNpvrBodyId:
+            pytest.skip("Using existing NPVR device.")
+        status, service_fe_account_id = \
+            self.base.prov_device_activate_kafka_validation(prov_device_kafka_consumer,
+                                                            self.testdata.ProvDeviceActivate_txnId)
         time.sleep(250)
+        assert status, service_fe_account_id
+        self.testdata.service_fe_account_id = service_fe_account_id
 
     def test_106_npvrEnablementSearchAfterAddingDevice(self):
         url, method, data = self.testdata.data_npvrEnablementSearch()
@@ -180,8 +224,6 @@ class TestBodyUpdateServiceScenario2:
         synthassert(resp_json['npvrEnablement'][0]['npvrEnabled'],
                     message='Error: npvrEnabled is not true',
                     response=resp)
-
-        time.sleep(5)
 
     def test_107_bodyConfigSearch(self):
         url, method, data = self.testdata.data_bodyConfigSearch()
@@ -204,8 +246,6 @@ class TestBodyUpdateServiceScenario2:
         synthassert(bool(re.search('recordingSettings', resp.text)),
                     message='Not able to get recordingSettings in resp',
                     response=resp)
-
-        time.sleep(5)
 
     def test_108_ProvDeviceCancel(self):
         url, method, data = self.testdata.data_pr1ProvDeviceCancel()
@@ -271,4 +311,3 @@ class TestBodyUpdateServiceScenario2:
                                                           self.testdata.tveServiceActivate_requestId)
         assert tivo_customer_id, "tivo_customer_id cancel fail for given tivo_customer_id=%s" % \
                                  self.testdata.tivo_customer_id
-        time.sleep(250)

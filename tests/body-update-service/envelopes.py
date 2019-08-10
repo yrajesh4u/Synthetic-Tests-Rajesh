@@ -6,6 +6,8 @@ class TestDataEnvelopes:
     npvr_bodyId = None
     internalId = None
     bodyId = None
+    usingExisingNpvrBodyId = False
+    tve_activate_status = False
     ProvDeviceActivate_txnId = None
     service_fe_account_id = None
     tveServiceActivate_requestId = None
