@@ -12,7 +12,7 @@ from synth_test_lib.synthassert import synthassert
 @pytest.mark.usefixtures("mso_tag")
 class TestBodyUpdateServiceScenario1:
     '''
-    TITLE: nPVR Provisioning and Enablement
+    TITLE: Device Provision then nDVR Activation
     DESCRIPTION: 
     Activates an account and a device.
     Tests if Body Update Service populates Network PVR field in the response of Body Config Search.
