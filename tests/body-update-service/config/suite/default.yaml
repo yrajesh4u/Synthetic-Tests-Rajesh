@@ -2,7 +2,7 @@ default:
   owner:  ServiceMindAlerts@tivo.com
   runbook: https://wiki.tivo.com/wiki/NOC_Runbook_-_Synthetic_Tests_-_body-update-service
   description: |-
-  To verify that nPVR feature flag is set correctly when a device is added/removed from the account.
-  This test is applicable for devices with nDVR capability.
+    To verify that nPVR feature flag is set correctly when a device is added/removed from the account.
+    This test is applicable for devices with nDVR capability.
   title: nPVR Body Update Service
   

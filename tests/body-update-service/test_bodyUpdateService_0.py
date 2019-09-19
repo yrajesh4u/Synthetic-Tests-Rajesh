@@ -8,12 +8,12 @@ from synth_test_lib.synthassert import synthassert
 @pytest.mark.parametrize('mso', ['common'])
 @pytest.mark.usefixtures("mso_tag")
 class TestBodyUpdateServiceHealthInfo:
-    ```
+    '''
     TITLE: Health of bodyUpdateService
     DESCRIPTION: 
     This is to validate if bodyUpdateService is up and running. It checks for health and info endpoints
     
-    ```    
+    '''    
         
     testdata = TestDataEnvelopes()
     base = BodyUpdateService()
