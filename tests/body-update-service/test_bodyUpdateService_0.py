@@ -9,10 +9,9 @@ from synth_test_lib.synthassert import synthassert
 @pytest.mark.usefixtures("mso_tag")
 class TestBodyUpdateServiceHealthInfo:
     '''
-    TITLE: Health of bodyUpdateService
+    TITLE: Health of the Body Update Service
     DESCRIPTION: 
-    This is to validate if bodyUpdateService is up and running. It checks for health and info endpoints
-    
+    Validates if Body Update Service is running and Healthy.
     '''    
         
     testdata = TestDataEnvelopes()
