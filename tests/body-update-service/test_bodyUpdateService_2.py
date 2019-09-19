@@ -11,6 +11,14 @@ from synth_test_lib.synthassert import synthassert
 @pytest.mark.parametrize('mso', ['common'])
 @pytest.mark.usefixtures("mso_tag")
 class TestBodyUpdateServiceScenario2:
+    '''
+    TITLE: nDVR Activation then Device Provision
+    DESCRIPTION: 
+    Activates a nDVR device in an Account.
+    Activates a Streamer Body in the same Account.
+    Tests if Body Update Service populates Network PVR field in the response of Body Config Search.
+    '''
+
     testdata = TestDataEnvelopes()
     base = BodyUpdateService()
 
