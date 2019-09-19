@@ -14,7 +14,8 @@ class TestBodyUpdateServiceScenario1:
     '''
     TITLE: Device Provision then nDVR Activation
     DESCRIPTION: 
-    Activates an account and a device.
+    Activates a Streamer Body in an Account.
+    Activates a nDVR device in the same Account.
     Tests if Body Update Service populates Network PVR field in the response of Body Config Search.
     '''
     testdata = TestDataEnvelopes()
