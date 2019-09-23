@@ -1,4 +1,6 @@
 default:
   owner: ServiceMindAlerts@tivo.com
   runbook: https://wiki.tivo.com/wiki/NOC_Runbook_-_Synthetic_Tests_-_TextSearchByNumbers
-  title: Text Search By Numbers
+  title: Numbers based Unified Search
+  description: |-
+    Validates the configuration and health of the PCD Search endpoint for Search by number.
