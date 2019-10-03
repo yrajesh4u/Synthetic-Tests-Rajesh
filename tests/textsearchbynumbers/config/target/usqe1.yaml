@@ -1,0 +1,17 @@
+default:
+  'pytest_mark' : 'synthetic_tests_textsearch'
+  'device_domains' : ['cableco-stb','rcn-stb']
+  'MiddlemindVip'        : 'pdk01.usqe1.tivo.com'
+  'mm_port'              : '8085'
+  'device_domain_config':
+    'cableco-stb':
+      'mso': 'cableco'
+      'deviceType': 'stb'
+      'bodyId': 'tsn:8D80001902E41D2'
+      'mind_version'         : "mind/mind23"
+    'rcn':
+      'mso': 'rcn'
+      'bodyId': 'tsn:8D80001902E41D2'
+      'deviceType': 'stb'
+      'mind_version'         : 'mind/mind23'
+
