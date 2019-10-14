@@ -8,7 +8,7 @@ default:
   bodyId: 'DE604ADCDA9316F'
   idType: 'partnerCustomerId:production'
   npvr_bodyId: 'tsn:AF50F00000350FC'
-  app_node: ['as01.tivo.com:9003', 'as02.tivo.com:9003', 'as03.tivo.com:9003', 'as04.tivo.com:9003']
+  app_node: ['as01.usqe1.tivo.com:9003', 'as02.usqe1.tivo.com:9003', 'as03.usqe1.tivo.com:9003', 'as04.usqe1.tivo.com:9003']
   kafka_host: 'kafka.tpc1.tivo.com:9092'
   feExtDeviceTopic: 'mirror.tpa1.production.feexternal.deviceTopic'
   tcidToTsnMap: 'mirror.tpa1.production.itproduction.kv.tcidToTsnMap'
